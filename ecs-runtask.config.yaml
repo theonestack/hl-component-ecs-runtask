@@ -41,12 +41,10 @@ state_machine: |
         ]
       },
       "Success": {
-        "Type": "Succeed",
-        "End": true
+        "Type": "Succeed"
       },
       "Failure": {
-        "Type": "Fail",
-        "End": true
+        "Type": "Fail"
       }
     }
   }
