@@ -27,7 +27,7 @@ state_machine: |
           "TaskDefinition": "${Task}",
           "NetworkConfiguration": {
             "AwsvpcConfiguration": {
-              "Subnets": "${SubnetId}",
+              "Subnets": ["${SubnetId}"],
               "AssignPublicIp": "DISABLED"
             }
           }
