@@ -24,10 +24,13 @@ CloudFormation do
 
   end
 
-  StepFunctions_StateMachine('StateMachine') do
-    StateMachineName FnSub("${EnvironmentName}-RunTask")
-    RoleArn FnGetAtt('StepFunctionRole', 'Arn')
-    DefinitionString FnSub(JSON.generate(JSON.parse(File.read('step_function.json'))), {SubnetId: FnSelect(0, Ref('SubnetIds')), Task: {"Ref"=>"Task"}})
+  state_machine = external_parameters.fetch(:state_machine, nil)
+  unless state_machine.nil?
+    StepFunctions_StateMachine('StateMachine') do
+      StateMachineName FnSub("${EnvironmentName}-RunTask")
+      RoleArn FnGetAtt('StepFunctionRole', 'Arn')
+      DefinitionString FnSub(state_machine, {SubnetId: FnSelect(0, Ref('SubnetIds')), Task: {"Ref"=>"Task"}})
+    end
   end
 
 end

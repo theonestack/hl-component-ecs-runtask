@@ -10,3 +10,43 @@ step_function_iam_policies:
       - ecs:RunTask
     resource:
       - Fn::Sub: arn:aws:ecs:::task-definition/${EnvironmentName}-*
+
+
+state_machine: |
+  {
+    "Comment": "",
+    "StartAt": "Run Task",
+    "TimeoutSeconds": 3600,
+    "States": {
+      "Run Task": {
+        "Type": "Task",
+        "Resource": "arn:aws:states:::ecs:runTask.sync",
+        "Parameters": {
+          "LaunchType": "FARGATE",
+          "Cluster": "${EcsCluster}",
+          "TaskDefinition": "${Task}",
+          "NetworkConfiguration": {
+            "AwsvpcConfiguration": {
+              "Subnets": "${SubnetId}",
+              "AssignPublicIp": "DISABLED"
+            }
+          }
+        },
+        "Next": "Success",
+        "Catch": [
+            {
+              "ErrorEquals": [ "States.ALL" ],
+              "Next": "Failure"
+            }
+        ]
+      },
+      "Success": {
+        "Type": "Succeed",
+        "End": true
+      },
+      "Failure": {
+        "Type": "Fail",
+        "End": true
+      }
+    }
+  }
