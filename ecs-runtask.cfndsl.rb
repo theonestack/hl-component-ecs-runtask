@@ -1,5 +1,6 @@
 CloudFormation do
 
+  component_name = external_parameters.fetch(:component_name, '')
   export = external_parameters.fetch(:export_name, external_parameters[:component_name])
 
   iam_policies = external_parameters.fetch(:step_function_iam_policies, {})
@@ -29,7 +30,7 @@ CloudFormation do
   state_machine = external_parameters.fetch(:state_machine, nil)
   unless state_machine.nil?
     StepFunctions_StateMachine('StateMachine') do
-      StateMachineName FnSub("${EnvironmentName}-RunTask")
+      StateMachineName FnSub("${EnvironmentName}-#{component_name}-RunTask")
       RoleArn FnGetAtt('StepFunctionRole', 'Arn')
       DefinitionString FnSub(state_machine, {SubnetId: FnSelect(0, Ref('SubnetIds')), Task: {"Ref"=>"Task"}})
     end
@@ -37,7 +38,7 @@ CloudFormation do
 
   EC2_SecurityGroup(:SecurityGroup) do
     VpcId Ref('VPCId')
-    GroupDescription "#{external_parameters[:component_name]} ecs runtask"
+    GroupDescription FnSub("${EnvironmentName}-#{external_parameters[:component_name]} ecs runtask")
     Metadata({
       cfn_nag: {
         rules_to_suppress: [
