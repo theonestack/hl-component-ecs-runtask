@@ -1,5 +1,7 @@
 CloudFormation do
 
+  export = external_parameters.fetch(:export_name, external_parameters[:component_name])
+
   iam_policies = external_parameters.fetch(:step_function_iam_policies, {})
   unless iam_policies.empty?
 
@@ -30,6 +32,34 @@ CloudFormation do
       StateMachineName FnSub("${EnvironmentName}-RunTask")
       RoleArn FnGetAtt('StepFunctionRole', 'Arn')
       DefinitionString FnSub(state_machine, {SubnetId: FnSelect(0, Ref('SubnetIds')), Task: {"Ref"=>"Task"}})
+    end
+  end
+
+  EC2_SecurityGroup(:SecurityGroup) do
+    VpcId Ref('VPCId')
+    GroupDescription "#{external_parameters[:component_name]} ecs runtask"
+    Metadata({
+      cfn_nag: {
+        rules_to_suppress: [
+          { id: 'F1000', reason: 'ignore egress for now' }
+        ]
+      }
+    })
+  end
+  Output(:SecurityGroup) do
+    Value(Ref(:SecurityGroup))
+    Export FnSub("${EnvironmentName}-#{export}-SecurityGroup")
+  end
+
+  ingress_rules = external_parameters.fetch(:ingress_rules, [])
+  ingress_rules.each_with_index do |ingress_rule, i|
+    EC2_SecurityGroupIngress("IngressRule#{i+1}") do
+      Description ingress_rule['desc'] if ingress_rule.has_key?('desc')
+      GroupId ingress_rule.has_key?('dest_sg') ? ingress_rule['dest_sg'] : Ref(:SecurityGroup)
+      SourceSecurityGroupId ingress_rule.has_key?('source_sg') ? ingress_rule['source_sg'] :  Ref(:SecurityGroup)
+      IpProtocol ingress_rule.has_key?('protocol') ? ingress_rule['protocol'] : 'tcp'
+      FromPort ingress_rule['from']
+      ToPort ingress_rule.has_key?('to') ? ingress_rule['to'] : ingress_rule['from']
     end
   end
 

@@ -38,6 +38,7 @@ state_machine: |
           "NetworkConfiguration": {
             "AwsvpcConfiguration": {
               "Subnets": ["${SubnetId}"],
+              "SecurityGroups": ["${SecurityGroup}"],
               "AssignPublicIp": "DISABLED"
             }
           }
