@@ -10,7 +10,17 @@ step_function_iam_policies:
       - ecs:RunTask
     resource:
       - Fn::Sub: arn:aws:ecs:::task-definition/${EnvironmentName}-*
-
+  manage_task:
+    action:
+      - ecs:StopTask
+      - ecs:DescribeTasks
+  task_events:
+    action:
+      - events:PutTargets
+      - events:PutRule
+      - events:DescribeRule
+    resource:
+      - Fn::Sub: arn:aws:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForECSTaskRule
 
 state_machine: |
   {
