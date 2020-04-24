@@ -8,6 +8,7 @@ step_function_iam_policies:
   run_task:
     action:
       - ecs:RunTask
+      - iam:PassRole
   manage_task:
     action:
       - ecs:StopTask
