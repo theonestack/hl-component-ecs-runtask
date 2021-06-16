@@ -29,7 +29,7 @@ CloudFormation do
 
   state_machine = external_parameters.fetch(:state_machine, nil)
   unless state_machine.nil?
-    StepFunctions_StateMachine('StateMachine') do
+    StepFunctions_StateMachine(:StateMachine) do
       StateMachineName FnSub("${EnvironmentName}-#{component_name}-RunTask")
       RoleArn FnGetAtt('StepFunctionRole', 'Arn')
       DefinitionString FnSub(state_machine, {SubnetId: FnSelect(0, Ref('SubnetIds')), Task: {"Ref"=>"Task"}})
@@ -62,6 +62,37 @@ CloudFormation do
       FromPort ingress_rule['from']
       ToPort ingress_rule.has_key?('to') ? ingress_rule['to'] : ingress_rule['from']
     end
+  end
+
+  schedule = external_parameters.fetch(:schedule, nil)
+  unless schedule.nil?
+    iam_policies = external_parameters.fetch(:scheduler_iam_policies, {})
+    policies = []
+    iam_policies.each do |name,policy|
+      policies << iam_policy_allow(name,policy['action'],policy['resource'] || '*')
+    end
+    IAM_Role(:EventBridgeInvokeRole) do
+      AssumeRolePolicyDocument ({
+        Statement: [
+          {
+            Effect: 'Allow',
+            Principal: { Service: [ 'events.amazonaws.com' ] },
+            Action: [ 'sts:AssumeRole' ]
+          }
+        ]
+      })
+      Path '/'
+      Policies(policies)
+    end
+    Events_Rule(:Schedule) do
+      Name FnSub("${EnvironmentName}-#{component_name}-schedule")
+      Description FnSub("{EnvironmentName} #{component_name} schedule")
+      ScheduleExpression schedule
+      Targets [{
+        Arn: Ref(:StateMachine),
+        RoleArn: FnGetAtt('EventBridgeInvokeRole', 'Arn')
+      }]
+    end 
   end
 
 end

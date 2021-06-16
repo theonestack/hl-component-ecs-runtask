@@ -21,6 +21,13 @@ step_function_iam_policies:
     resource:
       - Fn::Sub: arn:aws:events:${AWS::Region}:${AWS::AccountId}:rule/StepFunctionsGetEventsForECSTaskRule
 
+scheduler_iam_policies:
+  event_schedule:
+    action:
+      - states:StartExecution
+    resource:
+      - Fn::Sub: arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${StateMachine}
+
 state_machine: |
   {
     "Comment": "",

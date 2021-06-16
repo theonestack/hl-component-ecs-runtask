@@ -4,3 +4,7 @@ test_metadata:
   name: default
   description: default config test
 
+task_definition:
+  dummy:
+    image: apline
+    tag_param: Version 
