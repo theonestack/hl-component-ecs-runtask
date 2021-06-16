@@ -1,3 +1,3 @@
 # ecs-runtask CfHighlander component
 
-[![Build Status](https://travis-ci.com/theonestack/hl-component-ecs-runtask.svg?branch=master)](https://travis-ci.com/theonestack/hl-component-ecs-runtask)
+![cftest](https://github.com/theonestack/hl-component-ecs-runtask/actions/workflows/cftest.yaml/badge.svg)
