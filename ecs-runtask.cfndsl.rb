@@ -89,8 +89,8 @@ CloudFormation do
     Events_Rule(:Schedule) do
       Name FnSub("${EnvironmentName}-#{component_name}-eventrule")
       Description FnSub("{EnvironmentName} #{component_name} eventrule")
-      ScheduleExpression schedule
-      EventPattern event_pattern
+      ScheduleExpression schedule unless schedule.nil?
+      EventPattern event_pattern unless event_pattern.nil?
       Targets [{
         Arn: Ref(:StateMachine),
         Id: 'test',
