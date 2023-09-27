@@ -67,7 +67,7 @@ CloudFormation do
   schedule = external_parameters.fetch(:schedule, nil)
   event_pattern = external_parameters.fetch(:event_pattern, nil)
 
-  unless schedule.nil?
+  unless schedule.nil? || event_pattern.nil?
     iam_policies = external_parameters.fetch(:scheduler_iam_policies, {})
     policies = []
     iam_policies.each do |name,policy|
@@ -87,8 +87,8 @@ CloudFormation do
       Policies(policies)
     end
     Events_Rule(:Schedule) do
-      Name FnSub("${EnvironmentName}-#{component_name}-schedule")
-      Description FnSub("{EnvironmentName} #{component_name} schedule")
+      Name FnSub("${EnvironmentName}-#{component_name}-eventrule")
+      Description FnSub("{EnvironmentName} #{component_name} eventrule")
       ScheduleExpression schedule
       EventPattern event_pattern
       Targets [{
