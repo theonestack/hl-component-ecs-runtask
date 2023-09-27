@@ -65,6 +65,8 @@ CloudFormation do
   end
 
   schedule = external_parameters.fetch(:schedule, nil)
+  event_pattern = external_parameters.fetch(:event_pattern, nil)
+
   unless schedule.nil?
     iam_policies = external_parameters.fetch(:scheduler_iam_policies, {})
     policies = []
@@ -88,6 +90,7 @@ CloudFormation do
       Name FnSub("${EnvironmentName}-#{component_name}-schedule")
       Description FnSub("{EnvironmentName} #{component_name} schedule")
       ScheduleExpression schedule
+      EventPattern event_pattern
       Targets [{
         Arn: Ref(:StateMachine),
         Id: 'test',
