@@ -67,7 +67,7 @@ CloudFormation do
   schedule = external_parameters.fetch(:schedule, nil)
   event_pattern = external_parameters.fetch(:event_pattern, nil)
 
-  if !schedule.nil || event_pattern.nil
+  if !schedule.nil || !event_pattern.nil
     iam_policies = external_parameters.fetch(:scheduler_iam_policies, {})
     policies = []
     iam_policies.each do |name,policy|
