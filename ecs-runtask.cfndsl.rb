@@ -90,7 +90,7 @@ CloudFormation do
       ScheduleExpression schedule
       Targets [{
         Arn: Ref(:StateMachine),
-        Id: 'test'
+        Id: 'test',
         RoleArn: FnGetAtt('EventBridgeInvokeRole', 'Arn')
       }]
     end 
