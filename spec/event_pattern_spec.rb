@@ -4,7 +4,7 @@ describe 'should fail without a task_definition' do
   
   context 'cftest' do
     it 'compiles test' do
-      expect(system("cfhighlander cftest #{@validate} --tests tests/schedule.test.yaml")).to be_truthy
+      expect(system("cfhighlander cftest #{@validate} --tests tests/event_pattern.test.yaml")).to be_truthy
     end
   end
 

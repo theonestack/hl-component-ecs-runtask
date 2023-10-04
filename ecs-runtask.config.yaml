@@ -26,7 +26,7 @@ scheduler_iam_policies:
     action:
       - states:StartExecution
     resource:
-      - Fn::Sub: arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${StateMachine}
+      - Fn::Sub: ${StateMachine}
 
 state_machine: |
   {
