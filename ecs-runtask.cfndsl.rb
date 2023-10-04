@@ -93,7 +93,7 @@ CloudFormation do
       EventPattern FnSub(event_pattern) unless event_pattern.nil?
       Targets [{
         Arn: Ref(:StateMachine),
-        Id: 'test',
+        Id: FnSub("{EnvironmentName}-#{component_name}-target"),
         RoleArn: FnGetAtt('EventBridgeInvokeRole', 'Arn')
       }]
     end 
