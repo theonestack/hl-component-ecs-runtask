@@ -105,7 +105,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property Description" do
-          expect(resource["Properties"]["Description"]).to eq({"Fn::Sub"=>"{EnvironmentName} ecs-runtask eventrule"})
+          expect(resource["Properties"]["Description"]).to eq({"Fn::Sub"=>"${EnvironmentName} ecs-runtask eventrule"})
       end
       
       it "to have property ScheduleExpression" do
@@ -113,7 +113,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property Targets" do
-          expect(resource["Properties"]["Targets"]).to eq([{"Arn"=>{"Ref"=>"StateMachine"}, "Id"=>{"Fn::Sub"=>"{EnvironmentName}-ecs-runtask-target"}, "RoleArn"=>{"Fn::GetAtt"=>["EventBridgeInvokeRole", "Arn"]}}])
+          expect(resource["Properties"]["Targets"]).to eq([{"Arn"=>{"Ref"=>"StateMachine"}, "Id"=>{"Fn::Sub"=>"${EnvironmentName}-ecs-runtask-target"}, "RoleArn"=>{"Fn::GetAtt"=>["EventBridgeInvokeRole", "Arn"]}}])
       end
       
     end
