@@ -84,7 +84,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property RetentionInDays" do
-          expect(resource["Properties"]["RetentionInDays"]).to eq("7")
+          expect(resource["Properties"]["RetentionInDays"]).to eq(7)
       end
       
     end
@@ -97,7 +97,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property ContainerDefinitions" do
-          expect(resource["Properties"]["ContainerDefinitions"]).to eq([{"Name"=>"dummy", "Image"=>{"Fn::Join"=>["", ["", "apline", ":", {"Ref"=>"ecsruntaskTaskVersion"}]]}, "LogConfiguration"=>{"LogDriver"=>"awslogs", "Options"=>{"awslogs-group"=>{"Ref"=>"LogGroup"}, "awslogs-region"=>{"Ref"=>"AWS::Region"}, "awslogs-stream-prefix"=>"dummy"}}}])
+          expect(resource["Properties"]["ContainerDefinitions"]).to eq([{"Name"=>"dummy", "Image"=>{"Fn::Join"=>["", [{"Fn::Sub"=>"/apline"}, ":", {"Ref"=>"ecsruntaskTaskVersion"}]]}, "LogConfiguration"=>{"LogDriver"=>"awslogs", "Options"=>{"awslogs-group"=>{"Ref"=>"LogGroup"}, "awslogs-region"=>{"Ref"=>"AWS::Region"}, "awslogs-stream-prefix"=>"dummy"}}}])
       end
       
       it "to have property RequiresCompatibilities" do
