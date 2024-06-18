@@ -105,7 +105,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property Description" do
-          expect(resource["Properties"]["Description"]).to eq({"Fn::Sub"=>"{EnvironmentName} ecs-runtask eventrule"})
+          expect(resource["Properties"]["Description"]).to eq({"Fn::Sub"=>"${EnvironmentName} ecs-runtask eventrule"})
       end
       
       it "to have property EventPattern" do
@@ -113,7 +113,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property Targets" do
-          expect(resource["Properties"]["Targets"]).to eq([{"Arn"=>{"Ref"=>"StateMachine"}, "Id"=>{"Fn::Sub"=>"{EnvironmentName}-ecs-runtask-target"}, "RoleArn"=>{"Fn::GetAtt"=>["EventBridgeInvokeRole", "Arn"]}}])
+          expect(resource["Properties"]["Targets"]).to eq([{"Arn"=>{"Ref"=>"StateMachine"}, "Id"=>{"Fn::Sub"=>"${EnvironmentName}-ecs-runtask-target"}, "RoleArn"=>{"Fn::GetAtt"=>["EventBridgeInvokeRole", "Arn"]}}])
       end
       
     end
@@ -130,7 +130,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property RetentionInDays" do
-          expect(resource["Properties"]["RetentionInDays"]).to eq("7")
+          expect(resource["Properties"]["RetentionInDays"]).to eq(7)
       end
       
     end
@@ -143,7 +143,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property ContainerDefinitions" do
-          expect(resource["Properties"]["ContainerDefinitions"]).to eq([{"Name"=>"dummy", "Image"=>{"Fn::Join"=>["", ["", "apline", ":", {"Ref"=>"ecsruntaskTaskVersion"}]]}, "LogConfiguration"=>{"LogDriver"=>"awslogs", "Options"=>{"awslogs-group"=>{"Ref"=>"LogGroup"}, "awslogs-region"=>{"Ref"=>"AWS::Region"}, "awslogs-stream-prefix"=>"dummy"}}}])
+          expect(resource["Properties"]["ContainerDefinitions"]).to eq([{"Name"=>"dummy", "Image"=>{"Fn::Join"=>["", [{"Fn::Sub"=>"/apline"}, ":", {"Ref"=>"ecsruntaskTaskVersion"}]]}, "LogConfiguration"=>{"LogDriver"=>"awslogs", "Options"=>{"awslogs-group"=>{"Ref"=>"LogGroup"}, "awslogs-region"=>{"Ref"=>"AWS::Region"}, "awslogs-stream-prefix"=>"dummy"}}}])
       end
       
       it "to have property RequiresCompatibilities" do
