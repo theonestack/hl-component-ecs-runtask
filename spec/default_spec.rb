@@ -117,7 +117,7 @@ describe 'compiled component ecs-runtask' do
       end
       
       it "to have property Tags" do
-          expect(resource["Properties"]["Tags"]).to eq([{"Key"=>"Name", "Value"=>"ecsruntaskTask"}, {"Key"=>"Environment", "Value"=>{"Ref"=>"EnvironmentName"}}, {"Key"=>"EnvironmentType", "Value"=>{"Ref"=>"EnvironmentType"}}])
+          expect(resource["Properties"]["Tags"]).to eq([{"Key"=>"Environment", "Value"=>{"Ref"=>"EnvironmentName"}}, {"Key"=>"EnvironmentType", "Value"=>{"Ref"=>"EnvironmentType"}}])
       end
       
     end
