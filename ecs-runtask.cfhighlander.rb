@@ -14,6 +14,6 @@ CfhighlanderTemplate do
   end
 
   #Pass the all the config from the parent component to the inlined component
-  Component template: 'ecs-task@0.5.14', name: "#{component_name.gsub('-','').gsub('_','')}Task", render: Inline, config: @config 
+  Component template: 'ecs-task@0.5.15', name: "#{component_name.gsub('-','').gsub('_','')}Task", render: Inline, config: @config 
 
 end
